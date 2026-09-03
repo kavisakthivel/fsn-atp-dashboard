@@ -17,9 +17,9 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#f0f4f8;color:
 .tab:hover:not(.active){color:#1e40af;background:#f8faff}
 .panel{display:none;padding:16px 24px}
 .panel.active{display:block}
-/* Summary cards */
+/* Cards — centered */
 .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;margin-bottom:14px}
-.card{background:#fff;border-radius:10px;padding:11px 14px;box-shadow:0 1px 8px rgba(0,0,0,.07);border-top:3px solid #3b82f6}
+.card{background:#fff;border-radius:10px;padding:11px 14px;box-shadow:0 1px 8px rgba(0,0,0,.07);border-top:3px solid #3b82f6;text-align:center}
 .card .val{font-size:20px;font-weight:800;color:#1e40af;line-height:1}
 .card .lbl{font-size:9px;color:#64748b;margin-top:3px;font-weight:700;text-transform:uppercase;letter-spacing:.4px}
 .card.green{border-top-color:#10b981}.card.green .val{color:#059669}
@@ -27,9 +27,11 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#f0f4f8;color:
 .card.red{border-top-color:#ef4444}.card.red .val{color:#dc2626}
 .card.purple{border-top-color:#8b5cf6}.card.purple .val{color:#7c3aed}
 .card.teal{border-top-color:#14b8a6}.card.teal .val{color:#0f766e}
+.card.blue2{border-top-color:#0284c7}.card.blue2 .val{color:#0284c7}
+.card.indigo{border-top-color:#6366f1}.card.indigo .val{color:#4f46e5}
 /* Alerts */
 .alerts{background:#fff;border-radius:10px;box-shadow:0 1px 8px rgba(0,0,0,.07);margin-bottom:14px;overflow:hidden}
-.alert-header{background:linear-gradient(135deg,#dc2626,#b91c1c);padding:9px 16px}
+.alert-header{background:linear-gradient(135deg,#dc2626,#b91c1c);padding:9px 16px;display:flex;align-items:center;justify-content:space-between}
 .alert-header h2{color:#fff;font-size:12px;font-weight:700}
 .alert-tabs{display:flex;background:#fef2f2;border-bottom:2px solid #fecaca;overflow-x:auto}
 .alert-tab{padding:7px 13px;cursor:pointer;font-size:11px;font-weight:600;color:#dc2626;border-bottom:3px solid transparent;margin-bottom:-2px;white-space:nowrap;transition:.15s}
@@ -39,8 +41,9 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#f0f4f8;color:
 .alert-panel.active{display:block}
 .atab-cnt{padding:1px 6px;border-radius:10px;font-size:10px;font-weight:800;margin-left:3px;color:#fff}
 .atab-cnt.red{background:#dc2626}.atab-cnt.amber{background:#f59e0b}.atab-cnt.teal{background:#0891b2}
-.section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:6px}
 .section-head h3{font-size:11.5px;font-weight:700;color:#1e293b}
+.section-head-right{display:flex;align-items:center;gap:8px}
 .cnt-badge{padding:2px 9px;border-radius:20px;font-size:10px;font-weight:700;color:#fff;background:#dc2626}
 .cnt-badge.amber{background:#f59e0b}.cnt-badge.teal{background:#0891b2}
 /* Filter bar */
@@ -65,15 +68,18 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#f0f4f8;color:
 .btn-reset{background:#fff;color:#64748b;border:1.5px solid #e2e8f0;padding:5px 12px;border-radius:7px;cursor:pointer;font-size:11px;font-weight:600}
 .btn-reset:hover{border-color:#94a3b8}
 .btn-export{background:linear-gradient(135deg,#059669,#0891b2);color:#fff;border:none;padding:5px 12px;border-radius:7px;cursor:pointer;font-size:11px;font-weight:700}
+.btn-export-sm{background:linear-gradient(135deg,#059669,#0891b2);color:#fff;border:none;padding:3px 10px;border-radius:6px;cursor:pointer;font-size:10px;font-weight:700;white-space:nowrap}
 /* Table */
 .tbl-wrap{background:#fff;border-radius:10px;box-shadow:0 1px 8px rgba(0,0,0,.07);overflow:hidden}
 table{width:100%;border-collapse:collapse;font-size:11px}
-thead th{background:linear-gradient(180deg,#1e40af,#1d4ed8);color:#fff;padding:8px 10px;text-align:left;white-space:nowrap;font-weight:700;cursor:pointer;font-size:10.5px;letter-spacing:.2px;position:sticky;top:0}
+thead th{background:linear-gradient(180deg,#1e40af,#1d4ed8);color:#fff;padding:8px 10px;text-align:left;white-space:nowrap;font-weight:700;cursor:pointer;font-size:10.5px;letter-spacing:.2px;position:sticky;top:0;z-index:2}
 thead th:hover{background:#1d4ed8}
 thead th.sort-asc::after{content:' ▲';color:#93c5fd;font-size:9px}
 thead th.sort-desc::after{content:' ▼';color:#93c5fd;font-size:9px}
-tbody tr:nth-child(even){background:#f8faff}
-tbody tr:hover{background:#eff6ff}
+.subtotal-row td{background:linear-gradient(135deg,#1e3a5f,#1e40af)!important;color:#fff!important;font-weight:800!important;font-size:10.5px;padding:7px 10px;border-bottom:2px solid #3b82f6;white-space:nowrap}
+.subtotal-row td .atp-sh,.subtotal-row td .atp-ds,.subtotal-row td .atp-total{color:#fff!important;font-weight:800}
+tbody tr:nth-child(even):not(.subtotal-row){background:#f8faff}
+tbody tr:hover:not(.subtotal-row){background:#eff6ff}
 tbody td{padding:6px 10px;border-bottom:1px solid #f1f5f9;white-space:nowrap;max-width:180px;overflow:hidden;text-overflow:ellipsis}
 .badge{display:inline-flex;align-items:center;padding:2px 7px;border-radius:20px;font-size:9.5px;font-weight:800}
 .b-both{background:#d1fae5;color:#065f46;border:1px solid #6ee7b7}
@@ -100,19 +106,20 @@ tbody td{padding:6px 10px;border-bottom:1px solid #f1f5f9;white-space:nowrap;max
 .mini-tbl th{background:#f8fafc;color:#374151;padding:6px 9px;text-align:left;border-bottom:2px solid #e5e7eb;font-weight:700;text-transform:uppercase;font-size:9.5px;letter-spacing:.4px}
 .mini-tbl td{padding:5px 9px;border-bottom:1px solid #f1f5f9}
 .mini-tbl tr:hover td{background:#f0f9ff}
+.mini-subtotal td{background:linear-gradient(135deg,#1e3a5f,#1e40af)!important;color:#fff!important;font-weight:800!important;font-size:10.5px}
 .info-bar{background:linear-gradient(135deg,#eff6ff,#dbeafe);border:1.5px solid #93c5fd;border-radius:8px;padding:8px 12px;margin-bottom:12px;font-size:11px;color:#1e40af;font-weight:600}
-/* Overview tab */
+/* Overview */
 .ov-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
 .ov-bu{background:#fff;border-radius:10px;padding:14px;box-shadow:0 1px 8px rgba(0,0,0,.07);border-top:3px solid #3b82f6}
 .ov-bu.mob{border-top-color:#3b82f6}.ov-bu.lrg{border-top-color:#10b981}.ov-bu.lif{border-top-color:#8b5cf6}.ov-bu.ele{border-top-color:#f59e0b}
-.ov-bu-title{font-size:11px;font-weight:800;color:#1e293b;margin-bottom:10px;display:flex;align-items:center;gap:5px}
+.ov-bu-title{font-size:11px;font-weight:800;color:#1e293b;margin-bottom:10px}
 .ov-stat{display:flex;justify-content:space-between;align-items:center;padding:3px 0;border-bottom:1px solid #f8fafc;font-size:10.5px}
 .ov-stat:last-child{border-bottom:none}
 .ov-stat .k{color:#64748b;font-weight:500}
 .ov-stat .v{font-weight:700;color:#1e293b}
-.ov-stat .v.red{color:#dc2626}.ov-stat .v.green{color:#059669}.ov-stat .v.orange{color:#d97706}.ov-stat .v.teal{color:#0891b2}
+.ov-stat .v.red{color:#dc2626}.ov-stat .v.green{color:#059669}.ov-stat .v.orange{color:#d97706}.ov-stat .v.teal{color:#0891b2}.ov-stat .v.purple{color:#7c3aed}.ov-stat .v.blue{color:#1d4ed8}
 .chart-section{background:#fff;border-radius:10px;padding:14px;box-shadow:0 1px 8px rgba(0,0,0,.07);margin-bottom:14px}
-.chart-section-title{font-size:12px;font-weight:700;color:#1e293b;margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid #f1f5f9;display:flex;align-items:center;gap:6px}
+.chart-section-title{font-size:12px;font-weight:700;color:#1e293b;margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid #f1f5f9}
 .chart-2col{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .chart-inner{height:220px;position:relative}
 </style>
@@ -123,7 +130,7 @@ tbody td{padding:6px 10px;border-bottom:1px solid #f1f5f9;white-space:nowrap;max
     <h1>📦 SH / DS FSN ATP Dashboard</h1>
     <div class="subtitle">Flipkart Analytics · Available to Promise · Mobile | Large Appliances | Lifestyle | Electronics</div>
   </div>
-  <div class="right">🕒 Last refreshed: 03 Sep 2026, 06:54 PM<br>parkavi.sakthivel@flipkart.com</div>
+  <div class="right">🕒 Last refreshed: 03 Sep 2026, 08:45 PM<br>parkavi.sakthivel@flipkart.com</div>
 </div>
 <div class="tabs">
   <div class="tab active" onclick="switchTab('mobile',this)">📱 Mobile</div>
@@ -161,6 +168,7 @@ const PAGE_SIZE=150;
 
 function fmt(n){return(n==null||n==='')?'-':Number(n).toLocaleString('en-IN');}
 function fmtF(n,d=1){return(n==null||n==='')?'-':Number(n).toFixed(d);}
+function fmtK(n){if(n>=10000000)return(n/10000000).toFixed(1)+'Cr';if(n>=100000)return(n/100000).toFixed(1)+'L';if(n>=1000)return(n/1000).toFixed(1)+'K';return String(n);}
 function atpBadge(v){
   if(v==='DS + SH')return'<span class="badge b-both">✓ DS+SH</span>';
   if(v==='DS Only')return'<span class="badge b-ds">DS Only</span>';
@@ -178,19 +186,23 @@ function dohCell(v){
   return`<span class="doh-ok">${fmtF(v)}d</span>`;
 }
 function uniq(data,key){return[...new Set(data.map(r=>r[key]).filter(Boolean))].sort();}
+
 function computeStats(data){
   const t=data.length;
   const dsOnly=data.filter(r=>r.atp_avail==='DS Only').length;
   const shOnly=data.filter(r=>r.atp_avail==='SH Only').length;
   const both=data.filter(r=>r.atp_avail==='DS + SH').length;
   const noAtp=data.filter(r=>r.total_atp===0).length;
+  const sh_atp_sum=data.reduce((s,r)=>s+r.sh_atp,0);
+  const ds_atp_sum=data.reduce((s,r)=>s+r.ds_atp,0);
+  const total_atp_sum=data.reduce((s,r)=>s+r.total_atp,0);
   const highDrr=data.filter(r=>r.drr>=30);
   const noDsHighDrr=highDrr.filter(r=>r.ds_atp===0);
   const noShHighDrr=highDrr.filter(r=>r.sh_atp===0);
   const lowDoh=data.filter(r=>r.doh>0&&r.doh<7);
   const critStock=data.filter(r=>r.total_atp>0&&r.doh>0&&r.doh<3);
   const goodSalesLowInv=data.filter(r=>(r.l30_fk+r.l30_hl)>500&&r.doh>0&&r.doh<14);
-  return{t,dsOnly,shOnly,both,noAtp,highDrr,noDsHighDrr,noShHighDrr,lowDoh,critStock,goodSalesLowInv};
+  return{t,dsOnly,shOnly,both,noAtp,sh_atp_sum,ds_atp_sum,total_atp_sum,highDrr,noDsHighDrr,noShHighDrr,lowDoh,critStock,goodSalesLowInv};
 }
 
 // multi-select
@@ -240,106 +252,32 @@ function sortData(data,col,dir){
   });
 }
 
-// CSV
-function exportCSV(tab){
-  const data=DATA[tab],s=state[tab];
-  const filtered=applyFilters(data,s.filters),sorted=sortData(filtered,s.sort,s.dir);
-  const hdr=['FSN','Brand','Vertical','Super Category','ATP Availability','Flag','SH ATP','DS ATP','Total ATP','L7 FK','L7 HL','L30 FK','L30 HL','L30 DRR','L30 DOH','Store Count','Product Title'];
-  const rows=sorted.map(r=>[r.fsn,r.brand,r.vertical,r.supercat,r.atp_avail,r.flag,r.sh_atp,r.ds_atp,r.total_atp,r.l7_fk,r.l7_hl,r.l30_fk,r.l30_hl,r.drr,r.doh,r.store_count,r.title]);
-  const csv=[hdr,...rows].map(row=>row.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
+// ── CSV helpers ──
+function doExportCSV(rows,filename,cols){
+  const hdr=cols.map(c=>c.h);
+  const data=rows.map(r=>cols.map(c=>c.val(r)));
+  const csv=[hdr,...data].map(row=>row.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
   const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
   const url=URL.createObjectURL(blob);
   const a=document.createElement('a');
-  a.href=url;a.download=`ATP_${tab}_${new Date().toISOString().slice(0,10)}.csv`;
+  a.href=url;a.download=filename;
   document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
 }
-
-// ── Overview Tab ──
-function renderOverview(){
-  const tabs=['mobile','large','lifestyle','electronics'];
-  const allStats=Object.fromEntries(tabs.map(t=>[t,computeStats(DATA[t]||[])]));
-
-  // BU summary grid
-  const buGrid=`<div class="ov-grid">${tabs.map(t=>{
-    const s=allStats[t],m=TAB_META[t];
-    return`<div class="ov-bu ${m.cls}">
-      <div class="ov-bu-title">${m.label}</div>
-      <div class="ov-stat"><span class="k">Total FSNs</span><span class="v">${s.t.toLocaleString('en-IN')}</span></div>
-      <div class="ov-stat"><span class="k">DS + SH</span><span class="v green">${s.both.toLocaleString('en-IN')}</span></div>
-      <div class="ov-stat"><span class="k">DS Only</span><span class="v teal">${s.dsOnly.toLocaleString('en-IN')}</span></div>
-      <div class="ov-stat"><span class="k">SH Only</span><span class="v" style="color:#7c3aed">${s.shOnly.toLocaleString('en-IN')}</span></div>
-      <div class="ov-stat"><span class="k">No ATP</span><span class="v orange">${s.noAtp.toLocaleString('en-IN')}</span></div>
-      <div class="ov-stat"><span class="k">No DS · High DRR</span><span class="v red">${s.noDsHighDrr.length}</span></div>
-      <div class="ov-stat"><span class="k">DOH &lt;7 Days</span><span class="v orange">${s.lowDoh.length}</span></div>
-      <div class="ov-stat"><span class="k">Good Sales, Low Stock</span><span class="v teal">${s.goodSalesLowInv.length}</span></div>
-    </div>`;
-  }).join('')}</div>`;
-
-  // Charts
-  const chartHtml=`<div class="chart-section">
-    <div class="chart-section-title">📊 ATP Coverage by Vertical — All BUs</div>
-    <div class="chart-2col">
-      <div><div style="font-size:10.5px;font-weight:700;color:#64748b;margin-bottom:6px">Stacked Coverage (FSN Count)</div><div class="chart-inner"><canvas id="chart-ov-stacked"></canvas></div></div>
-      <div><div style="font-size:10.5px;font-weight:700;color:#64748b;margin-bottom:6px">Critical Alerts Comparison</div><div class="chart-inner"><canvas id="chart-ov-alerts"></canvas></div></div>
-    </div>
-  </div>`;
-
-  document.getElementById('tab-overview').innerHTML=buGrid+chartHtml;
-  setTimeout(()=>initOverviewCharts(tabs,allStats),80);
+const CSV_COLS=[
+  {h:'FSN',val:r=>r.fsn},{h:'Brand',val:r=>r.brand},{h:'Vertical',val:r=>r.vertical},
+  {h:'Super Category',val:r=>r.supercat},{h:'ATP Availability',val:r=>r.atp_avail},
+  {h:'Flag',val:r=>r.flag},{h:'SH ATP',val:r=>r.sh_atp},{h:'DS ATP',val:r=>r.ds_atp},
+  {h:'Total ATP',val:r=>r.total_atp},{h:'L7 FK',val:r=>r.l7_fk},{h:'L7 HL',val:r=>r.l7_hl},
+  {h:'L30 FK',val:r=>r.l30_fk},{h:'L30 HL',val:r=>r.l30_hl},{h:'L30 DRR',val:r=>r.drr},
+  {h:'L30 DOH',val:r=>r.doh},{h:'Store Count',val:r=>r.store_count},{h:'Product Title',val:r=>r.title}
+];
+function exportCSV(tab){
+  const data=DATA[tab],s=state[tab];
+  const filtered=applyFilters(data,s.filters),sorted=sortData(filtered,s.sort,s.dir);
+  doExportCSV(sorted,`ATP_${tab}_${new Date().toISOString().slice(0,10)}.csv`,CSV_COLS);
 }
-function initOverviewCharts(tabs,allStats){
-  ['chart-ov-stacked','chart-ov-alerts'].forEach(id=>{
-    if(charts[id]){charts[id].destroy();delete charts[id];}
-  });
-  const labels=tabs.map(t=>TAB_META[t].label.replace(/^.+ /,''));
-  // stacked bar
-  const sel=document.getElementById('chart-ov-stacked');
-  if(sel&&typeof Chart!=='undefined'){
-    charts['chart-ov-stacked']=new Chart(sel,{
-      type:'bar',
-      data:{
-        labels,
-        datasets:[
-          {label:'DS+SH',data:tabs.map(t=>allStats[t].both),backgroundColor:'#10b981',borderRadius:2},
-          {label:'DS Only',data:tabs.map(t=>allStats[t].dsOnly),backgroundColor:'#3b82f6',borderRadius:2},
-          {label:'SH Only',data:tabs.map(t=>allStats[t].shOnly),backgroundColor:'#8b5cf6',borderRadius:2},
-          {label:'No ATP',data:tabs.map(t=>allStats[t].noAtp),backgroundColor:'#ef4444',borderRadius:2},
-        ]
-      },
-      options:{
-        responsive:true,maintainAspectRatio:false,
-        plugins:{legend:{position:'top',labels:{font:{size:10},boxWidth:10,padding:8}}},
-        scales:{
-          x:{stacked:true,grid:{display:false},ticks:{font:{size:10}}},
-          y:{stacked:true,grid:{color:'#f1f5f9'},ticks:{font:{size:10}}}
-        }
-      }
-    });
-  }
-  // alert comparison grouped bar
-  const ael=document.getElementById('chart-ov-alerts');
-  if(ael&&typeof Chart!=='undefined'){
-    charts['chart-ov-alerts']=new Chart(ael,{
-      type:'bar',
-      data:{
-        labels,
-        datasets:[
-          {label:'No DS ATP (High DRR)',data:tabs.map(t=>allStats[t].noDsHighDrr.length),backgroundColor:'#dc2626',borderRadius:2},
-          {label:'No SH ATP (High DRR)',data:tabs.map(t=>allStats[t].noShHighDrr.length),backgroundColor:'#8b5cf6',borderRadius:2},
-          {label:'DOH <7d',data:tabs.map(t=>allStats[t].lowDoh.length),backgroundColor:'#f59e0b',borderRadius:2},
-          {label:'Critical <3d',data:tabs.map(t=>allStats[t].critStock.length),backgroundColor:'#ef4444',borderRadius:2},
-        ]
-      },
-      options:{
-        responsive:true,maintainAspectRatio:false,
-        plugins:{legend:{position:'top',labels:{font:{size:10},boxWidth:10,padding:8}}},
-        scales:{
-          x:{grid:{display:false},ticks:{font:{size:10}}},
-          y:{grid:{color:'#f1f5f9'},ticks:{font:{size:10}}}
-        }
-      }
-    });
-  }
+function exportAlertCSV(rows,name){
+  doExportCSV(rows,`ATP_Alert_${name}_${new Date().toISOString().slice(0,10)}.csv`,CSV_COLS);
 }
 
 // ── Filter widget ──
@@ -377,7 +315,7 @@ function buildFilters(tab,data,filters){
   </div>`;
 }
 
-// ── Alerts ──
+// ── Alert tables ──
 const ALERT_COLS=[
   {h:'FSN',fn:r=>`<span class="fsn-cell">${r.fsn}</span>`},
   {h:'Brand',fn:r=>`<b>${r.brand}</b>`},
@@ -406,9 +344,29 @@ const GSLI_COLS=[
   {h:'DS ATP',fn:r=>`<span class="atp-ds">${fmt(r.ds_atp)}</span>`},
   {h:'Product',fn:r=>`<span title="${r.title}">${r.title.substring(0,35)}…</span>`},
 ];
-function buildAlertTable(rows,cols){
+function miniSubtotal(rows,cols){
+  const numKeys=['sh_atp','ds_atp','total_atp','l30_fk','l30_hl','l7_fk','l7_hl','drr'];
+  return`<tr class="mini-subtotal"><td colspan="${cols.length}" style="padding:6px 9px;font-size:10px;letter-spacing:.3px">
+    SUBTOTAL (${rows.length} FSNs) &nbsp;|&nbsp;
+    SH ATP: <b>${fmt(rows.reduce((s,r)=>s+r.sh_atp,0))}</b> &nbsp;|&nbsp;
+    DS ATP: <b>${fmt(rows.reduce((s,r)=>s+r.ds_atp,0))}</b> &nbsp;|&nbsp;
+    Total ATP: <b>${fmt(rows.reduce((s,r)=>s+r.total_atp,0))}</b> &nbsp;|&nbsp;
+    L30 FK: <b>${fmt(rows.reduce((s,r)=>s+r.l30_fk,0))}</b> &nbsp;|&nbsp;
+    L30 HL: <b>${fmt(rows.reduce((s,r)=>s+r.l30_hl,0))}</b>
+  </td></tr>`;
+}
+function buildAlertTable(rows,cols,csvName){
   if(!rows.length)return'<div style="color:#64748b;padding:16px;text-align:center;font-style:italic;font-size:11px">No items at this threshold.</div>';
-  return`<div style="overflow-x:auto"><table class="mini-tbl"><thead><tr>${cols.map(c=>`<th>${c.h}</th>`).join('')}</tr></thead><tbody>${rows.map(r=>`<tr>${cols.map(c=>`<td>${c.fn(r)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+  const rowsJson=JSON.stringify(rows).replace(/`/g,'\\`');
+  return`<div style="overflow-x:auto">
+    <table class="mini-tbl">
+      <thead><tr>${cols.map(c=>`<th>${c.h}</th>`).join('')}</tr></thead>
+      <tbody>
+        ${miniSubtotal(rows,cols)}
+        ${rows.map(r=>`<tr>${cols.map(c=>`<td>${c.fn(r)}</td>`).join('')}</tr>`).join('')}
+      </tbody>
+    </table>
+  </div>`;
 }
 function buildAlerts(tab,stats){
   const noDsTop=stats.noDsHighDrr.sort((a,b)=>b.drr-a.drr).slice(0,50);
@@ -416,6 +374,20 @@ function buildAlerts(tab,stats){
   const lowDoh=stats.lowDoh.sort((a,b)=>a.doh-b.doh).slice(0,50);
   const crit=stats.critStock.sort((a,b)=>a.doh-b.doh).slice(0,50);
   const gsli=stats.goodSalesLowInv.sort((a,b)=>(b.l30_fk+b.l30_hl)-(a.l30_fk+a.l30_hl)).slice(0,50);
+
+  function apanel(id,title,rows,cols,badgeCls,csvName){
+    return`<div id="${id}" class="alert-panel">
+      <div class="section-head">
+        <h3>${title}</h3>
+        <div class="section-head-right">
+          <span class="cnt-badge ${badgeCls}">${rows.length} FSNs</span>
+          <button class="btn-export-sm" onclick='exportAlertCSV(${JSON.stringify(rows)},"${csvName}")'>⬇ CSV</button>
+        </div>
+      </div>
+      ${buildAlertTable(rows,cols,csvName)}
+    </div>`;
+  }
+
   return`<div class="alerts">
     <div class="alert-header"><h2>🚨 Pro Insights — Action Required</h2></div>
     <div class="alert-tabs">
@@ -425,55 +397,41 @@ function buildAlerts(tab,stats){
       <div class="alert-tab" onclick="switchAlert(this,'aCrit-${tab}')">🔴 Critical &lt;3d <span class="atab-cnt red">${crit.length}</span></div>
       <div class="alert-tab" onclick="switchAlert(this,'aGsli-${tab}')">📈 Good Sales, Low Stock <span class="atab-cnt teal">${gsli.length}</span></div>
     </div>
-    <div id="aNoDs-${tab}" class="alert-panel active">
-      <div class="section-head"><h3>DRR ≥30 + <span style="color:#dc2626">Zero DS ATP</span></h3><span class="cnt-badge">${noDsTop.length}</span></div>
-      ${buildAlertTable(noDsTop,ALERT_COLS)}
-    </div>
-    <div id="aNoSh-${tab}" class="alert-panel">
-      <div class="section-head"><h3>DRR ≥30 + <span style="color:#7c3aed">Zero SH ATP</span></h3><span class="cnt-badge">${noShTop.length}</span></div>
-      ${buildAlertTable(noShTop,ALERT_COLS)}
-    </div>
-    <div id="aLDoh-${tab}" class="alert-panel">
-      <div class="section-head"><h3>All FSNs with <span style="color:#d97706">DOH &lt;7 days</span></h3><span class="cnt-badge amber">${lowDoh.length}</span></div>
-      ${buildAlertTable(lowDoh,ALERT_COLS)}
-    </div>
-    <div id="aCrit-${tab}" class="alert-panel">
-      <div class="section-head"><h3>All FSNs with <span style="color:#dc2626">DOH &lt;3 days</span> — Critical</h3><span class="cnt-badge">${crit.length}</span></div>
-      ${buildAlertTable(crit,ALERT_COLS)}
-    </div>
-    <div id="aGsli-${tab}" class="alert-panel">
-      <div class="section-head"><h3><span style="color:#059669">L30 Sales &gt;500</span> but <span style="color:#d97706">DOH &lt;14d</span> — Replenish now</h3><span class="cnt-badge teal">${gsli.length}</span></div>
-      <div style="background:#f0fdf4;border:1px solid #6ee7b7;border-radius:7px;padding:7px 12px;margin-bottom:8px;font-size:10.5px;color:#065f46;font-weight:600">💡 Selling fast — inventory runs out in &lt;14 days. Prioritize DS + SH replenishment.</div>
-      ${buildAlertTable(gsli,GSLI_COLS)}
-    </div>
+    ${apanel(`aNoDs-${tab}`,'DRR ≥30 + <span style="color:#dc2626">Zero DS ATP</span>',noDsTop,ALERT_COLS,'','NoDS_ATP')}
+    ${apanel(`aNoSh-${tab}`,'DRR ≥30 + <span style="color:#7c3aed">Zero SH ATP</span>',noShTop,ALERT_COLS,'','NoSH_ATP')}
+    ${apanel(`aLDoh-${tab}`,'All FSNs with <span style="color:#d97706">DOH &lt;7 days</span>',lowDoh,ALERT_COLS,'amber','Low_DOH')}
+    ${apanel(`aCrit-${tab}`,'All FSNs with <span style="color:#dc2626">DOH &lt;3 days</span> — Critical',crit,ALERT_COLS,'','Critical_Stock')}
+    ${apanel(`aGsli-${tab}`,'<span style="color:#059669">L30 Sales &gt;500</span> + <span style="color:#d97706">DOH &lt;14d</span> — Replenish now',gsli,GSLI_COLS,'teal','Good_Sales_Low_Stock')}
+    <script>document.getElementById('aNoDs-${tab}').classList.add('active');<\/script>
   </div>`;
 }
 
-// ── Main table ──
+// ── Main table with subtotal ──
 const MAIN_COLS=[
-  {h:'FSN',k:'fsn',fn:r=>`<span class="fsn-cell">${r.fsn}</span>`},
-  {h:'Store IDs',k:null,fn:r=>r.store_count>0?`<span title="${r.store_ids.join(', ')}">${r.store_ids[0]||''}${r.store_count>1?' +'+(r.store_count-1):''}</span>`:'-'},
-  {h:'Vertical',k:'vertical',fn:r=>r.vertical},
-  {h:'Super Category',k:'supercat',fn:r=>`<span title="${r.supercat}">${r.supercat.substring(0,16)}</span>`},
-  {h:'Brand',k:'brand',fn:r=>`<b>${r.brand}</b>`},
-  {h:'ATP',k:'atp_avail',fn:r=>atpBadge(r.atp_avail)},
-  {h:'Flag',k:'flag',fn:r=>r.flag||'-'},
-  {h:'SH ATP',k:'sh_atp',fn:r=>`<span class="atp-sh">${fmt(r.sh_atp)}</span>`},
-  {h:'DS ATP',k:'ds_atp',fn:r=>`<span class="atp-ds">${fmt(r.ds_atp)}</span>`},
-  {h:'Total ATP',k:'total_atp',fn:r=>`<span class="atp-total">${fmt(r.total_atp)}</span>`},
-  {h:'L7 FK',k:'l7_fk',fn:r=>fmt(r.l7_fk)},
-  {h:'L7 HL',k:'l7_hl',fn:r=>fmt(r.l7_hl)},
-  {h:'L30 FK',k:'l30_fk',fn:r=>fmt(r.l30_fk)},
-  {h:'L30 HL',k:'l30_hl',fn:r=>fmt(r.l30_hl)},
-  {h:'DRR',k:'drr',fn:r=>drrCell(r.drr)},
-  {h:'DOH',k:'doh',fn:r=>dohCell(r.doh)},
+  {h:'FSN',k:'fsn',fn:r=>`<span class="fsn-cell">${r.fsn}</span>`,sub:()=>'SUBTOTAL'},
+  {h:'Store IDs',k:null,fn:r=>r.store_count>0?`<span title="${r.store_ids.join(', ')}">${r.store_ids[0]||''}${r.store_count>1?' +'+(r.store_count-1):''}</span>`:'-',sub:()=>''},
+  {h:'Vertical',k:'vertical',fn:r=>r.vertical,sub:()=>''},
+  {h:'Super Category',k:'supercat',fn:r=>`<span title="${r.supercat}">${r.supercat.substring(0,16)}</span>`,sub:()=>''},
+  {h:'Brand',k:'brand',fn:r=>`<b>${r.brand}</b>`,sub:()=>''},
+  {h:'ATP',k:'atp_avail',fn:r=>atpBadge(r.atp_avail),sub:()=>''},
+  {h:'Flag',k:'flag',fn:r=>r.flag||'-',sub:()=>''},
+  {h:'SH ATP',k:'sh_atp',fn:r=>`<span class="atp-sh">${fmt(r.sh_atp)}</span>`,sub:rows=>`${fmt(rows.reduce((s,r)=>s+r.sh_atp,0))}`},
+  {h:'DS ATP',k:'ds_atp',fn:r=>`<span class="atp-ds">${fmt(r.ds_atp)}</span>`,sub:rows=>`${fmt(rows.reduce((s,r)=>s+r.ds_atp,0))}`},
+  {h:'Total ATP',k:'total_atp',fn:r=>`<span class="atp-total">${fmt(r.total_atp)}</span>`,sub:rows=>`${fmt(rows.reduce((s,r)=>s+r.total_atp,0))}`},
+  {h:'L7 FK',k:'l7_fk',fn:r=>fmt(r.l7_fk),sub:rows=>fmt(rows.reduce((s,r)=>s+r.l7_fk,0))},
+  {h:'L7 HL',k:'l7_hl',fn:r=>fmt(r.l7_hl),sub:rows=>fmt(rows.reduce((s,r)=>s+r.l7_hl,0))},
+  {h:'L30 FK',k:'l30_fk',fn:r=>fmt(r.l30_fk),sub:rows=>fmt(rows.reduce((s,r)=>s+r.l30_fk,0))},
+  {h:'L30 HL',k:'l30_hl',fn:r=>fmt(r.l30_hl),sub:rows=>fmt(rows.reduce((s,r)=>s+r.l30_hl,0))},
+  {h:'DRR',k:'drr',fn:r=>drrCell(r.drr),sub:()=>''},
+  {h:'DOH',k:'doh',fn:r=>dohCell(r.doh),sub:()=>''},
 ];
 function buildTable(tab,data,s){
   const filtered=applyFilters(data,s.filters),sorted=sortData(filtered,s.sort,s.dir);
   const total=sorted.length,totalPages=Math.max(1,Math.ceil(total/PAGE_SIZE));
   const pg=Math.min(s.page,totalPages),slice=sorted.slice((pg-1)*PAGE_SIZE,pg*PAGE_SIZE);
   const thead=`<thead><tr>${MAIN_COLS.map(c=>{const a=s.sort===c.k,cls=a?(s.dir===-1?'sort-desc':'sort-asc'):'';return`<th class="${cls}" onclick="${c.k?`doSort('${tab}','${c.k}')`:''}">${c.h}</th>`;}).join('')}</tr></thead>`;
-  const tbody=`<tbody>${slice.map(r=>`<tr>${MAIN_COLS.map(c=>`<td>${c.fn(r)}</td>`).join('')}</tr>`).join('')}</tbody>`;
+  const subtotalRow=`<tr class="subtotal-row">${MAIN_COLS.map(c=>`<td>${c.sub(sorted)}</td>`).join('')}</tr>`;
+  const tbody=`<tbody>${subtotalRow}${slice.map(r=>`<tr>${MAIN_COLS.map(c=>`<td>${c.fn(r)}</td>`).join('')}</tr>`).join('')}</tbody>`;
   let pages=[];
   if(totalPages<=7){for(let i=1;i<=totalPages;i++)pages.push(i);}
   else{pages=[1];let lo=Math.max(2,pg-2),hi=Math.min(totalPages-1,pg+2);if(lo>2)pages.push('…');for(let i=lo;i<=hi;i++)pages.push(i);if(hi<totalPages-1)pages.push('…');pages.push(totalPages);}
@@ -495,12 +453,67 @@ function renderPanel(tab){
     <div class="card teal"><div class="val">${stats.dsOnly.toLocaleString('en-IN')}</div><div class="lbl">DS Only</div></div>
     <div class="card purple"><div class="val">${stats.shOnly.toLocaleString('en-IN')}</div><div class="lbl">SH Only</div></div>
     <div class="card orange"><div class="val">${stats.noAtp.toLocaleString('en-IN')}</div><div class="lbl">No ATP</div></div>
+    <div class="card blue2"><div class="val">${fmtK(stats.ds_atp_sum)}</div><div class="lbl">Total DS ATP</div></div>
+    <div class="card indigo"><div class="val">${fmtK(stats.sh_atp_sum)}</div><div class="lbl">Total SH ATP</div></div>
     <div class="card red"><div class="val">${stats.noDsHighDrr.length}</div><div class="lbl">High DRR · No DS</div></div>
     <div class="card red"><div class="val">${stats.noShHighDrr.length}</div><div class="lbl">High DRR · No SH</div></div>
     <div class="card orange"><div class="val">${stats.lowDoh.length}</div><div class="lbl">DOH &lt;7 Days</div></div>
     <div class="card teal"><div class="val">${stats.goodSalesLowInv.length}</div><div class="lbl">Good Sales · Low Stock</div></div>
   </div>`;
   el.innerHTML=note+cards+buildAlerts(tab,stats)+buildFilters(tab,data,s.filters)+buildTable(tab,data,s);
+}
+
+// ── Overview ──
+function renderOverview(){
+  const tabs=['mobile','large','lifestyle','electronics'];
+  const allStats=Object.fromEntries(tabs.map(t=>[t,computeStats(DATA[t]||[])]));
+  const buGrid=`<div class="ov-grid">${tabs.map(t=>{
+    const s=allStats[t],m=TAB_META[t];
+    return`<div class="ov-bu ${m.cls}">
+      <div class="ov-bu-title">${m.label}</div>
+      <div class="ov-stat"><span class="k">Total FSNs</span><span class="v">${s.t.toLocaleString('en-IN')}</span></div>
+      <div class="ov-stat"><span class="k">DS + SH</span><span class="v green">${s.both.toLocaleString('en-IN')}</span></div>
+      <div class="ov-stat"><span class="k">DS Only</span><span class="v teal">${s.dsOnly.toLocaleString('en-IN')}</span></div>
+      <div class="ov-stat"><span class="k">SH Only</span><span class="v purple">${s.shOnly.toLocaleString('en-IN')}</span></div>
+      <div class="ov-stat"><span class="k">No ATP</span><span class="v orange">${s.noAtp.toLocaleString('en-IN')}</span></div>
+      <div class="ov-stat"><span class="k">Total DS ATP</span><span class="v blue">${fmtK(s.ds_atp_sum)}</span></div>
+      <div class="ov-stat"><span class="k">Total SH ATP</span><span class="v purple">${fmtK(s.sh_atp_sum)}</span></div>
+      <div class="ov-stat"><span class="k">No DS · High DRR</span><span class="v red">${s.noDsHighDrr.length}</span></div>
+      <div class="ov-stat"><span class="k">DOH &lt;7 Days</span><span class="v orange">${s.lowDoh.length}</span></div>
+      <div class="ov-stat"><span class="k">Good Sales, Low Stock</span><span class="v teal">${s.goodSalesLowInv.length}</span></div>
+    </div>`;
+  }).join('')}</div>`;
+  const chartHtml=`<div class="chart-section">
+    <div class="chart-section-title">📊 ATP Coverage by Vertical — All BUs</div>
+    <div class="chart-2col">
+      <div><div style="font-size:10.5px;font-weight:700;color:#64748b;margin-bottom:6px">Stacked Coverage (FSN Count)</div><div class="chart-inner"><canvas id="chart-ov-stacked"></canvas></div></div>
+      <div><div style="font-size:10.5px;font-weight:700;color:#64748b;margin-bottom:6px">Critical Alerts Comparison</div><div class="chart-inner"><canvas id="chart-ov-alerts"></canvas></div></div>
+    </div>
+  </div>`;
+  document.getElementById('tab-overview').innerHTML=buGrid+chartHtml;
+  setTimeout(()=>initOverviewCharts(tabs,allStats),80);
+}
+function initOverviewCharts(tabs,allStats){
+  ['chart-ov-stacked','chart-ov-alerts'].forEach(id=>{if(charts[id]){charts[id].destroy();delete charts[id];}});
+  const labels=tabs.map(t=>TAB_META[t].label.replace(/^.+ /,''));
+  const sel=document.getElementById('chart-ov-stacked');
+  if(sel&&typeof Chart!=='undefined'){
+    charts['chart-ov-stacked']=new Chart(sel,{type:'bar',data:{labels,datasets:[
+      {label:'DS+SH',data:tabs.map(t=>allStats[t].both),backgroundColor:'#10b981',borderRadius:2},
+      {label:'DS Only',data:tabs.map(t=>allStats[t].dsOnly),backgroundColor:'#3b82f6',borderRadius:2},
+      {label:'SH Only',data:tabs.map(t=>allStats[t].shOnly),backgroundColor:'#8b5cf6',borderRadius:2},
+      {label:'No ATP',data:tabs.map(t=>allStats[t].noAtp),backgroundColor:'#ef4444',borderRadius:2},
+    ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:10},boxWidth:10,padding:8}}},scales:{x:{stacked:true,grid:{display:false},ticks:{font:{size:10}}},y:{stacked:true,grid:{color:'#f1f5f9'},ticks:{font:{size:10}}}}}});
+  }
+  const ael=document.getElementById('chart-ov-alerts');
+  if(ael&&typeof Chart!=='undefined'){
+    charts['chart-ov-alerts']=new Chart(ael,{type:'bar',data:{labels,datasets:[
+      {label:'No DS ATP',data:tabs.map(t=>allStats[t].noDsHighDrr.length),backgroundColor:'#dc2626',borderRadius:2},
+      {label:'No SH ATP',data:tabs.map(t=>allStats[t].noShHighDrr.length),backgroundColor:'#8b5cf6',borderRadius:2},
+      {label:'DOH <7d',data:tabs.map(t=>allStats[t].lowDoh.length),backgroundColor:'#f59e0b',borderRadius:2},
+      {label:'Critical <3d',data:tabs.map(t=>allStats[t].critStock.length),backgroundColor:'#ef4444',borderRadius:2},
+    ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:10},boxWidth:10,padding:8}}},scales:{x:{grid:{display:false},ticks:{font:{size:10}}},y:{grid:{color:'#f1f5f9'},ticks:{font:{size:10}}}}}});
+  }
 }
 
 function switchTab(tab,el){
