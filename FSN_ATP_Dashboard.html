@@ -1,0 +1,306 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SH/DS FSN ATP Dashboard — Flipkart</title><script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script><script src="atp_data.js"></script><style>*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#f0f4f8;color:#1e293b;font-size:12px}
+.topbar{background:linear-gradient(135deg,#1e40af 0%,#0284c7 60%,#0891b2 100%);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 3px 16px rgba(30,64,175,.3)}
+.topbar h1{font-size:16px;font-weight:800;color:#fff}
+.topbar .subtitle{color:#bae6fd;font-size:10px;margin-top:2px}
+.topbar .right{text-align:right;color:#bae6fd;font-size:10px;line-height:1.6}
+.tabs{display:flex;background:#fff;border-bottom:3px solid #e2e8f0;padding:0 24px;box-shadow:0 2px 6px rgba(0,0,0,.05)}
+.tab{padding:10px 20px;cursor:pointer;font-weight:700;color:#64748b;border-bottom:3px solid transparent;margin-bottom:-3px;transition:.2s;font-size:12px}
+.tab.active{color:#1e40af;border-bottom-color:#1e40af;background:linear-gradient(to bottom,#eff6ff,#fff)}
+.tab:hover:not(.active){color:#1e40af;background:#f8faff}
+.panel{display:none;padding:16px 24px}
+.panel.active{display:block}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;margin-bottom:14px}
+.card{background:#fff;border-radius:10px;padding:11px 14px;box-shadow:0 1px 8px rgba(0,0,0,.07);border-top:3px solid #3b82f6;text-align:center}
+.card .val{font-size:20px;font-weight:800;color:#1e40af;line-height:1}
+.card .lbl{font-size:9px;color:#64748b;margin-top:3px;font-weight:700;text-transform:uppercase;letter-spacing:.4px}
+.card.green{border-top-color:#10b981}.card.green .val{color:#059669}
+.card.orange{border-top-color:#f59e0b}.card.orange .val{color:#d97706}
+.card.red{border-top-color:#ef4444}.card.red .val{color:#dc2626}
+.card.purple{border-top-color:#8b5cf6}.card.purple .val{color:#7c3aed}
+.card.teal{border-top-color:#14b8a6}.card.teal .val{color:#0f766e}
+.card.blue2{border-top-color:#0284c7}.card.blue2 .val{color:#0284c7}
+.card.indigo{border-top-color:#6366f1}.card.indigo .val{color:#4f46e5}
+.alerts{background:#fff;border-radius:10px;box-shadow:0 1px 8px rgba(0,0,0,.07);margin-bottom:14px;overflow:hidden}
+.alert-header{background:linear-gradient(135deg,#dc2626,#b91c1c);padding:9px 16px}
+.alert-header h2{color:#fff;font-size:12px;font-weight:700}
+.alert-tabs{display:flex;background:#fef2f2;border-bottom:2px solid #fecaca;overflow-x:auto}
+.alert-tab{padding:7px 13px;cursor:pointer;font-size:11px;font-weight:600;color:#dc2626;border-bottom:3px solid transparent;margin-bottom:-2px;white-space:nowrap;transition:.15s}
+.alert-tab.active{background:#fff;border-bottom-color:#dc2626}
+.alert-tab:hover{background:#fff5f5}
+.alert-panel{display:none;padding:12px 16px}
+.alert-panel.active{display:block}
+.atab-cnt{padding:1px 6px;border-radius:10px;font-size:10px;font-weight:800;margin-left:3px;color:#fff}
+.atab-cnt.red{background:#dc2626}.atab-cnt.amber{background:#f59e0b}.atab-cnt.teal{background:#0891b2}
+.section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:6px}
+.section-head h3{font-size:11.5px;font-weight:700;color:#1e293b}
+.section-head-right{display:flex;align-items:center;gap:8px}
+.cnt-badge{padding:2px 9px;border-radius:20px;font-size:10px;font-weight:700;color:#fff;background:#dc2626}
+.cnt-badge.amber{background:#f59e0b}.cnt-badge.teal{background:#0891b2}
+.filter-bar{background:#fff;border-radius:10px;box-shadow:0 1px 8px rgba(0,0,0,.07);padding:10px 14px;margin-bottom:12px;display:flex;gap:7px;flex-wrap:wrap;align-items:flex-end}
+.filter-group{display:flex;flex-direction:column;gap:2px}
+.filter-group label{font-size:9px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.5px}
+.ms-wrap{position:relative;min-width:120px}
+.ms-toggle{background:#f8fafc;border:1.5px solid #e2e8f0;color:#1e293b;padding:5px 8px;border-radius:7px;font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:5px;white-space:nowrap;transition:.15s;user-select:none}
+.ms-toggle:hover{border-color:#3b82f6;background:#fff}
+.ms-lbl{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100px}
+.ms-arrow{color:#94a3b8;font-size:9px}
+.ms-dropdown{position:absolute;top:calc(100% + 3px);left:0;z-index:999;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;box-shadow:0 6px 20px rgba(0,0,0,.13);min-width:170px;max-height:260px;display:flex;flex-direction:column}
+.ms-search{padding:7px 9px;border-bottom:1px solid #f1f5f9}
+.ms-search input{width:100%;border:1.5px solid #e2e8f0;border-radius:5px;padding:3px 7px;font-size:11px;outline:none}
+.ms-search input:focus{border-color:#3b82f6}
+.ms-list{overflow-y:auto;max-height:200px;padding:3px 0}
+.ms-item{display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:#1e293b;cursor:pointer}
+.ms-item:hover{background:#eff6ff;color:#1e40af}
+.ms-item input[type=checkbox]{accent-color:#1e40af;width:12px;height:12px;cursor:pointer}
+.fsn-search{background:#f8fafc;border:1.5px solid #e2e8f0;color:#1e293b;padding:5px 8px;border-radius:7px;font-size:11px;width:130px;transition:.15s}
+.fsn-search:focus{outline:none;border-color:#3b82f6;background:#fff}
+.btn-reset{background:#fff;color:#64748b;border:1.5px solid #e2e8f0;padding:5px 12px;border-radius:7px;cursor:pointer;font-size:11px;font-weight:600}
+.btn-reset:hover{border-color:#94a3b8}
+.btn-export{background:linear-gradient(135deg,#059669,#0891b2);color:#fff;border:none;padding:5px 12px;border-radius:7px;cursor:pointer;font-size:11px;font-weight:700}
+.btn-export-sm{background:linear-gradient(135deg,#059669,#0891b2);color:#fff;border:none;padding:3px 10px;border-radius:6px;cursor:pointer;font-size:10px;font-weight:700;white-space:nowrap}
+.tbl-wrap{background:#fff;border-radius:10px;box-shadow:0 1px 8px rgba(0,0,0,.07);overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:11px}
+thead th{background:linear-gradient(180deg,#1e40af,#1d4ed8);color:#fff;padding:8px 10px;text-align:left;white-space:nowrap;font-weight:700;cursor:pointer;font-size:10.5px;letter-spacing:.2px;position:sticky;top:0;z-index:2}
+thead th:hover{background:#1d4ed8}
+thead th.sort-asc::after{content:' ▲';color:#93c5fd;font-size:9px}
+thead th.sort-desc::after{content:' ▼';color:#93c5fd;font-size:9px}
+.subtotal-row td{background:linear-gradient(135deg,#1e3a5f,#1e40af)!important;color:#fff!important;font-weight:800!important;font-size:10.5px;padding:7px 10px;border-bottom:2px solid #3b82f6;white-space:nowrap}
+tbody tr:nth-child(even):not(.subtotal-row){background:#f8faff}
+tbody tr:hover:not(.subtotal-row){background:#eff6ff}
+tbody td{padding:6px 10px;border-bottom:1px solid #f1f5f9;white-space:nowrap;max-width:200px;overflow:hidden;text-overflow:ellipsis}
+.badge{display:inline-flex;align-items:center;padding:2px 7px;border-radius:20px;font-size:9.5px;font-weight:800}
+.b-both{background:#d1fae5;color:#065f46;border:1px solid #6ee7b7}
+.b-ds{background:#dbeafe;color:#1e40af;border:1px solid #93c5fd}
+.b-sh{background:#ede9fe;color:#5b21b6;border:1px solid #c4b5fd}
+.b-none{background:#fee2e2;color:#991b1b;border:1px solid #fca5a5}
+.drr-high{color:#dc2626;font-weight:800}
+.drr-med{color:#d97706;font-weight:700}
+.drr-low{color:#2563eb;font-weight:600}
+.doh-crit{background:#dc2626;color:#fff;border-radius:4px;padding:1px 5px;font-weight:800;font-size:10px}
+.doh-low{background:#f59e0b;color:#fff;border-radius:4px;padding:1px 5px;font-weight:700;font-size:10px}
+.doh-ok{color:#059669;font-weight:700}
+.atp-sh{color:#7c3aed;font-weight:700}
+.atp-ds{color:#1d4ed8;font-weight:700}
+.atp-total{color:#1e293b;font-weight:800}
+.store-ids-cell{word-break:break-all;white-space:normal;max-height:80px;overflow-y:auto;display:block;font-size:11px;line-height:1.4;}.fsn-cell{font-family:'Consolas','Courier New',monospace;font-size:10px;color:#0891b2;font-weight:600;background:#f0fdfa;padding:1px 4px;border-radius:3px}
+.combo-cell{font-family:'Consolas','Courier New',monospace;font-size:9.5px;color:#7c3aed;max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:help}
+.pagination{display:flex;align-items:center;justify-content:space-between;padding:8px 0 2px}
+.pg-info{color:#64748b;font-size:11px;font-weight:600}
+.pg-btns{display:flex;gap:3px}
+.pg-btn{background:#fff;border:1.5px solid #e2e8f0;color:#64748b;padding:3px 9px;border-radius:6px;cursor:pointer;font-size:11px;font-weight:600}
+.pg-btn.active{background:#1e40af;color:#fff;border-color:#1e40af}
+.pg-btn:hover{border-color:#3b82f6;color:#1e40af}
+.mini-tbl{width:100%;border-collapse:collapse;font-size:11px}
+.mini-tbl th{background:#f8fafc;color:#374151;padding:6px 9px;text-align:left;border-bottom:2px solid #e5e7eb;font-weight:700;text-transform:uppercase;font-size:9.5px;letter-spacing:.4px}
+.mini-tbl td{padding:5px 9px;border-bottom:1px solid #f1f5f9}
+.mini-tbl tr:hover td{background:#f0f9ff}
+.mini-subtotal td{background:linear-gradient(135deg,#1e3a5f,#1e40af)!important;color:#fff!important;font-weight:800!important;font-size:10.5px}
+.info-bar{background:linear-gradient(135deg,#eff6ff,#dbeafe);border:1.5px solid #93c5fd;border-radius:8px;padding:8px 12px;margin-bottom:12px;font-size:11px;color:#1e40af;font-weight:600}
+.ov-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+.ov-bu{background:#fff;border-radius:10px;padding:14px;box-shadow:0 1px 8px rgba(0,0,0,.07);border-top:3px solid #3b82f6}
+.ov-bu.mob{border-top-color:#3b82f6}.ov-bu.lrg{border-top-color:#10b981}.ov-bu.lif{border-top-color:#8b5cf6}.ov-bu.ele{border-top-color:#f59e0b}
+.ov-bu-title{font-size:11px;font-weight:800;color:#1e293b;margin-bottom:10px}
+.ov-stat{display:flex;justify-content:space-between;align-items:center;padding:3px 0;border-bottom:1px solid #f8fafc;font-size:10.5px}
+.ov-stat:last-child{border-bottom:none}
+.ov-stat .k{color:#64748b;font-weight:500}
+.ov-stat .v{font-weight:700;color:#1e293b}
+.ov-stat .v.red{color:#dc2626}.ov-stat .v.green{color:#059669}.ov-stat .v.orange{color:#d97706}.ov-stat .v.teal{color:#0891b2}.ov-stat .v.purple{color:#7c3aed}.ov-stat .v.blue{color:#1d4ed8}
+.chart-section{background:#fff;border-radius:10px;padding:14px;box-shadow:0 1px 8px rgba(0,0,0,.07);margin-bottom:14px}
+.chart-section-title{font-size:12px;font-weight:700;color:#1e293b;margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid #f1f5f9}
+.chart-2col{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.chart-inner{height:220px;position:relative}.det-section{background:#fff;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,.09);padding:18px;margin-bottom:16px;border-left:4px solid #1e40af}.det-section.sh-section{border-left-color:#7c3aed}.det-section-title{font-size:13px;font-weight:800;color:#0f172a;margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid #e2e8f0;letter-spacing:.2px}.det-matrix{border-collapse:separate;border-spacing:0;width:auto;min-width:700px}.det-matrix th{background:linear-gradient(180deg,#0f172a 0%,#1e3a5f 100%);color:#e2e8f0;padding:8px 10px;text-align:center;font-size:10.5px;font-weight:800;white-space:nowrap;position:sticky;top:0;z-index:2;letter-spacing:.3px;border-right:1px solid #334155}.det-matrix th.day-hdr{background:linear-gradient(180deg,#1e40af,#1d4ed8);color:#fff;font-size:11px}.det-matrix th.day-hdr.d0{background:linear-gradient(180deg,#065f46,#059669)}.det-matrix th.sub-hdr{background:linear-gradient(180deg,#1e3a5f,#1e40af);font-size:9.5px;color:#bfdbfe;border-top:1px solid #334155}.det-matrix th.sub-hdr.d0{background:linear-gradient(180deg,#064e3b,#047857)}.det-matrix td{padding:7px 10px;border-bottom:1px solid #e2e8f0;border-right:1px solid #f1f5f9;text-align:center;font-size:11.5px;font-weight:600;white-space:nowrap;color:#0f172a}.det-matrix td.row-label{text-align:left;font-weight:800;font-size:12px;color:#0f172a;background:#f1f5f9!important;border-right:2px solid #cbd5e1;min-width:160px;padding-left:12px}.det-matrix .aff-row td{background:#fef2f2;color:#7f1d1d}.det-matrix .aff-row td.row-label{background:linear-gradient(135deg,#fee2e2,#fecaca)!important;color:#991b1b;border-left:4px solid #dc2626}.det-matrix .ov-row td{background:#eff6ff;color:#1e3a8a}.det-matrix .ov-row td.row-label{background:linear-gradient(135deg,#dbeafe,#bfdbfe)!important;color:#1e40af;border-left:4px solid #3b82f6}.det-matrix tr:hover td:not(.row-label){filter:brightness(0.94)}.det-matrix .num-atp{color:#059669;font-weight:800}.det-matrix .num-drr{color:#b45309;font-weight:800}.det-matrix .num-fsn{color:#1d4ed8;font-weight:800}.det-matrix .aff-row .num-atp{color:#b91c1c}.det-matrix .aff-row .num-drr{color:#92400e}.det-matrix .aff-row .num-fsn{color:#991b1b}.l30-summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0 4px}.l30-card{border-radius:10px;padding:14px 18px;display:flex;flex-direction:column;gap:6px}.l30-card.overall{background:linear-gradient(135deg,#eff6ff,#dbeafe);border:2px solid #93c5fd}.l30-card.affected{background:linear-gradient(135deg,#fef2f2,#fee2e2);border:2px solid #fca5a5}.l30-card-title{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}.l30-card.overall .l30-card-title{color:#1e40af}.l30-card.affected .l30-card-title{color:#991b1b}.l30-stat{display:flex;justify-content:space-between;font-size:12px;padding:2px 0;border-bottom:1px solid rgba(0,0,0,.06)}.l30-stat:last-child{border-bottom:none}.l30-stat .lk{font-weight:600;color:#374151}.l30-stat .lv{font-weight:800;color:#0f172a}.l30-card.affected .lv{color:#7f1d1d}.l30-divider{border:none;border-top:2px dashed #e2e8f0;margin:18px 0}.dm-wrap{margin-bottom:14px}.dm-section{background:#fff;border-radius:10px;box-shadow:0 1px 8px rgba(0,0,0,.07);padding:14px 16px;margin-bottom:10px;border-left:4px solid #1e40af}.dm-section+.dm-section{border-left-color:#7c3aed}.dm-title{font-size:12px;font-weight:800;color:#0f172a;margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid #e2e8f0}.dm-tbl{border-collapse:separate;border-spacing:0;width:auto;min-width:600px}.dm-tbl th{background:linear-gradient(180deg,#1e40af,#1d4ed8);color:#fff;padding:7px 9px;text-align:center;font-size:10px;font-weight:800;white-space:nowrap;border-right:1px solid #334155}.dm-tbl th.dm-day{background:linear-gradient(180deg,#1e40af,#1d4ed8);font-size:10.5px}.dm-tbl th.dm-day.dm-d0{background:linear-gradient(180deg,#065f46,#059669)}.dm-tbl th.dm-sub{background:linear-gradient(180deg,#1e3a5f,#1e40af);font-size:9px;color:#bfdbfe;border-top:1px solid #334155}.dm-tbl th.dm-sub.dm-d0{background:linear-gradient(180deg,#064e3b,#047857)}.dm-tbl th.dm-label{background:linear-gradient(180deg,#0f172a,#1e3a5f);text-align:left;min-width:150px;padding-left:10px}.dm-tbl td{padding:6px 9px;border-bottom:1px solid #e2e8f0;border-right:1px solid #f1f5f9;text-align:center;font-size:11px;font-weight:600;white-space:nowrap}.dm-tbl td.dm-label{text-align:left;font-weight:800;background:#f1f5f9!important;border-right:2px solid #cbd5e1;padding-left:10px}.dm-aff td{background:#fef2f2}.dm-aff td.dm-label{background:linear-gradient(135deg,#fee2e2,#fecaca)!important;color:#991b1b;border-left:4px solid #dc2626}.dm-ov td{background:#eff6ff}.dm-ov td.dm-label{background:linear-gradient(135deg,#dbeafe,#bfdbfe)!important;color:#1e40af;border-left:4px solid #3b82f6}.dm-fsn{color:#1d4ed8;font-weight:800}.dm-drr{color:#b45309;font-weight:800}.dm-atp{color:#059669;font-weight:800}.dm-aff .dm-fsn,.dm-aff .dm-drr,.dm-aff .dm-atp{color:#991b1b}.dm-l30{margin-top:6px}.dm-l30-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.dm-l30-card{border-radius:8px;padding:10px 14px}.dm-l30-ov{background:linear-gradient(135deg,#eff6ff,#dbeafe);border:1.5px solid #93c5fd}.dm-l30-af{background:linear-gradient(135deg,#fef2f2,#fee2e2);border:1.5px solid #fca5a5}.dm-l30-ct{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;margin-bottom:5px}.dm-l30-ov .dm-l30-ct{color:#1e40af}.dm-l30-af .dm-l30-ct{color:#991b1b}.dm-l30-stat{display:flex;justify-content:space-between;font-size:11px;padding:2px 0;border-bottom:1px solid rgba(0,0,0,.06)}.dm-l30-stat:last-child{border-bottom:none}.dm-l30-k{color:#374151;font-weight:500}.dm-l30-v{font-weight:800;color:#0f172a}</style></head><body><div class="topbar"><h1>🛒 Flipkart ATP</h1><div><div class="subtitle">SH / DS FSN ATP Dashboard</div></div><div class="right">Last refreshed: 17 Sep 2026, 03:38 PM</div></div><div class="tabs"><div class="tab active" onclick="switchTab('mobile',this)">📱 Mobile</div><div class="tab" onclick="switchTab('large',this)">🧺 Large Appliances</div><div class="tab" onclick="switchTab('lifestyle',this)">👗 Lifestyle</div><div class="tab" onclick="switchTab('electronics',this)">💻 Electronics</div><div class="tab" onclick="switchTab('overview',this)">📊 Overview</div></div><div id="tab-mobile" class="panel active"></div><div id="tab-large" class="panel"></div><div id="tab-lifestyle" class="panel"></div><div id="tab-electronics" class="panel"></div><div id="tab-overview" class="panel"></div><script>const TAB_META={mobile:{label:'📱 Mobile',cls:'mob'},large:{label:'🏠 Large Appliances',cls:'lrg'},lifestyle:{label:'👗 Lifestyle',cls:'lif'},electronics:{label:'🖥 Electronics',cls:'ele'}};
+const state={mobile:{page:1,sort:'ds_atp',dir:-1,filters:{}},large:{page:1,sort:'ds_atp',dir:-1,filters:{}},lifestyle:{page:1,sort:'ds_atp',dir:-1,filters:{}},electronics:{page:1,sort:'ds_atp',dir:-1,filters:{}}};
+const charts={};const PAGE_SIZE=150;
+function fmt(n){return(n==null||n==='')?'-':Number(n).toLocaleString('en-IN');}
+function fmtF(n,d=1){return(n==null||n==='')?'-':Number(n).toFixed(d);}
+function fmtK(n){if(n>=10000000)return(n/10000000).toFixed(1)+'Cr';if(n>=100000)return(n/100000).toFixed(1)+'L';if(n>=1000)return(n/1000).toFixed(1)+'K';return String(n);}
+function atpBadge(v){if(v==='DS + SH')return'<span class="badge b-both">✓ DS+SH</span>';if(v==='DS Only')return'<span class="badge b-ds">DS Only</span>';if(v==='SH Only')return'<span class="badge b-sh">SH Only</span>';return'<span class="badge b-none">No ATP</span>';}
+function drrCell(v){if(v>=50)return'<span class="drr-high">▲'+fmtF(v)+'</span>';if(v>=20)return'<span class="drr-med">'+fmtF(v)+'</span>';return'<span class="drr-low">'+fmtF(v)+'</span>';}
+function dohCell(v){if(v>0&&v<3)return'<span class="doh-crit">⚠'+fmtF(v)+'d</span>';if(v>=3&&v<7)return'<span class="doh-low">'+fmtF(v)+'d</span>';return'<span class="doh-ok">'+fmtF(v)+'d</span>';}
+function fsnStoreCombos(r,maxShow){if(!r.store_ids||!r.store_ids.length)return r.fsn+'|—';var limit=maxShow||r.store_ids.length;var pairs=r.store_ids.slice(0,limit).map(function(s){return r.fsn+'|'+s;});return pairs.join(', ');}
+function uniq(data,key){return[...new Set(data.map(r=>r[key]).filter(Boolean))].sort();}
+function computeStats(data){
+  var t=data.length,dsOnly=data.filter(r=>r.fsn_atp_avail==='DS Only').length,shOnly=data.filter(r=>r.fsn_atp_avail==='SH Only').length,both=data.filter(r=>r.fsn_atp_avail==='DS + SH').length,noAtp=data.filter(r=>r.fsn_atp_avail==='No ATP'||r.total_atp===0).length;
+  var sh_atp_sum=data.reduce((s,r)=>s+r.sh_atp,0),ds_atp_sum=data.reduce((s,r)=>s+r.ds_atp,0),total_atp_sum=data.reduce((s,r)=>s+r.total_atp,0);
+  var highDrr=data.filter(r=>r.drr>=30),noDsHighDrr=highDrr.filter(r=>r.ds_atp===0),noShHighDrr=highDrr.filter(r=>r.sh_atp===0);
+  var lowDoh=data.filter(r=>r.doh>0&&r.doh<7),critStock=data.filter(r=>r.total_atp>0&&r.doh>0&&r.doh<3),goodSalesLowInv=data.filter(r=>r.drr>10&&r.doh>0&&r.doh<14);
+  return{t,dsOnly,shOnly,both,noAtp,sh_atp_sum,ds_atp_sum,total_atp_sum,highDrr,noDsHighDrr,noShHighDrr,lowDoh,critStock,goodSalesLowInv};}
+function toggleFilter(tab,key,val,checked){if(!(state[tab].filters[key] instanceof Set))state[tab].filters[key]=new Set();if(checked)state[tab].filters[key].add(val);else state[tab].filters[key].delete(val);if(state[tab].filters[key].size===0)delete state[tab].filters[key];state[tab].page=1;renderPanel(tab);}
+function setFsnFilter(tab,val){if(val)state[tab].filters.fsn=val;else delete state[tab].filters.fsn;state[tab].page=1;renderPanel(tab);}
+function resetFilters(tab){state[tab].filters={};state[tab].page=1;renderPanel(tab);}
+function toggleMs(id,e){if(e)e.stopPropagation();var dd=document.getElementById(id+'-dd');if(!dd)return;var open=dd.style.display!=='none';document.querySelectorAll('.ms-dropdown').forEach(d=>d.style.display='none');if(!open)dd.style.display='flex';}
+function toggleSelectAll(e,tab,key,checked){e.stopPropagation();var wrap=document.getElementById('ms-'+key+'-'+tab);if(!wrap)return;wrap.querySelectorAll('.ms-list .ms-item input').forEach(function(cb){cb.checked=checked;var val=cb.closest('.ms-item').querySelector('span').textContent;if(!(state[tab].filters[key] instanceof Set))state[tab].filters[key]=new Set();if(checked)state[tab].filters[key].add(val);else state[tab].filters[key].delete(val);});if(!checked)delete state[tab].filters[key];state[tab].page=1;renderPanel(tab);}
+function filterMsList(ddId,q){document.querySelectorAll('#'+ddId+' .ms-item').forEach(item=>{item.style.display=item.querySelector('span').textContent.toLowerCase().includes(q.toLowerCase())?'':'none';});}
+document.addEventListener('click',()=>document.querySelectorAll('.ms-dropdown').forEach(d=>d.style.display='none'));
+function applyFilters(data,f){return data.filter(r=>{for(var key of['vertical','supercat','brand','atp_avail','bbd_master']){var s=f[key];if(s instanceof Set&&s.size>0&&!s.has(r[key]))return false;}if(f.fsn&&!r.fsn.toLowerCase().includes(f.fsn.toLowerCase()))return false;return true;});}
+function sortData(data,col,dir){return[...data].sort((a,b)=>{var av=a[col],bv=b[col];if(typeof av==='string')return dir*av.localeCompare(bv);return dir*((av||0)-(bv||0));});}
+function doExportCSV(rows,filename,cols){var expanded=[];rows.forEach(function(r){var ids=r.store_ids&&r.store_ids.length?r.store_ids:["—"];ids.forEach(function(sid){var la=r.store_atp&&r.store_atp[sid]||[];var ds=la[0]||0,sh=la[1]||0;expanded.push(Object.assign({},r,{_sid:sid,ds_atp:ds,sh_atp:sh,total_atp:ds+sh}));});});var hdr=cols.map(c=>c.h);var csvData=expanded.map(r=>cols.map(c=>c.val(r)));var csv=[hdr,...csvData].map(row=>row.map(v=>'"'+String(v).replace(/"/g,'\"\"')+'"').join(',')).join('\n');var blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8;'});var url=URL.createObjectURL(blob);var a=document.createElement('a');a.href=url;a.download=filename;document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);}
+const CSV_COLS=[{h:'FSN',val:r=>r.fsn},{h:'Store ID',val:r=>r._sid||'—'},{h:'BBD Master',val:r=>r.bbd_master||''},{h:'Brand',val:r=>r.brand},{h:'Vertical',val:r=>r.vertical},{h:'Super Category',val:r=>r.supercat},{h:'ATP Availability',val:r=>r.atp_avail},{h:'SH ATP',val:r=>r.sh_atp},{h:'DS ATP',val:r=>r.ds_atp},{h:'Total ATP',val:r=>r.total_atp},{h:'L7 FK',val:r=>r.l7_fk},{h:'L7 HL',val:r=>r.l7_hl},{h:'L30 FK',val:r=>r.l30_fk},{h:'L30 HL',val:r=>r.l30_hl},{h:'L30 DRR',val:r=>r.drr},{h:'L30 DOH',val:r=>r.doh},{h:'Product Title',val:r=>r.title}];
+function exportCSV(tab){var data=DATA[tab],s=state[tab];var filtered=applyFilters(data,s.filters),sorted=sortData(filtered,s.sort,s.dir);doExportCSV(sorted,'ATP_'+tab+'_'+new Date().toISOString().slice(0,10)+'.csv',CSV_COLS);}
+function exportAlertCSV(rows,name){doExportCSV(rows,'ATP_Alert_'+name+'_'+new Date().toISOString().slice(0,10)+'.csv',CSV_COLS);}
+const DS_DAYS=['D-1','D-2','D-3','D-4','D-5','D-6','D-7'];
+const SH_DAYS=['D-1','D-2','D-3','D-4','D-5','D-6','D-7'];
+function exportAffectedCSV(tab,type){
+  var m=window.MATRIX&&window.MATRIX[tab];
+  if(!m){alert('No matrix data for this BU');return;}
+  var combos=type==='ds'?(m.affected_ds||[]):(m.affected_sh||[]);
+  if(!combos.length){alert('No affected FSN-Store combos (L30 DRR>0.5 & DOH<10) for '+tab);return;}
+  var hdr,rows;
+  if(type==='ds'){
+    hdr=['FSN','Store ID','SH P0','Brand','Vertical','Super Cat','L30 DRR','L30 DOH','DS ATP (D0)','Title'];
+    rows=combos.map(function(r){return[r.fsn,r.store_id,r.sh_p0||'',r.brand,r.vertical,r.supercat,r.l30_drr,r.l30_doh,r.ds_atp,r.title];});
+  }else{
+    hdr=['FSN','SH P0','Brand','Vertical','Super Cat','L30 DRR','L30 DOH','SH ATP (D-1)','Title'];
+    rows=combos.map(function(r){return[r.fsn,r.sh_p0,r.brand,r.vertical,r.supercat,r.l30_drr,r.l30_doh,r.sh_atp,r.title];});
+  }
+  var csv=[hdr].concat(rows).map(function(row){
+    return row.map(function(v){return'"'+String(v==null?'':v).replace(/"/g,'""')+'"';}).join(',');
+  }).join('\n');
+  var blob=new Blob(['﻿'+csv],{type:'text/csv;charset=utf-8;'});
+  var url=URL.createObjectURL(blob);var a=document.createElement('a');
+  a.href=url;
+  a.download='Affected_'+tab+'_'+type.toUpperCase()+'_'+new Date().toISOString().slice(0,10)+'.csv';
+  document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
+}
+function renderDayMatrix(tab){
+  var m=window.MATRIX&&window.MATRIX[tab];
+  if(!m)return'';
+  function buildM(matrix,days,title,type){
+    var hdr='<tr><th class="dm-label" rowspan="2">'+title+'</th>';
+    days.forEach(function(d){var c=d==='D0'?' dm-d0':'';hdr+='<th colspan="3" class="dm-day'+c+'">'+d+'</th>';});
+    hdr+='</tr><tr>';
+    days.forEach(function(d){var c=d==='D0'?' dm-d0':'';hdr+='<th class="dm-sub'+c+'">#FSN</th><th class="dm-sub'+c+'">DRR</th><th class="dm-sub'+c+'">ATP</th>';});
+    hdr+='</tr>';
+    function mkRow(label,key,cls){
+      var cells='<tr class="'+cls+'"><td class="dm-label">'+label+'</td>';
+      days.forEach(function(d){
+        var x=(matrix[d]||{})[key]||{};
+        cells+='<td class="dm-fsn">'+fmt(x.fsn_count||0)+'</td><td class="dm-drr">'+fmtF(x.drr||0)+'</td><td class="dm-atp">'+fmt(x.atp||0)+'</td>';
+      });
+      return cells+'</tr>';
+    }
+    var affCnt=type==='ds'?(m.affected_ds||[]).length:(m.affected_sh||[]).length;
+    function mkComboRow(){
+      var cells='<tr style="background:#f0fdf4"><td class="dm-label" style="border-left:4px solid #10b981;background:linear-gradient(135deg,#dcfce7,#bbf7d0)!important;color:#065f46">\ud83d\udd17 Affected FSN\u00d7Store</td>';
+      days.forEach(function(d){
+        var x=(matrix[d]||{})['affected']||{};
+        cells+='<td style="color:#059669;font-weight:800;background:#f0fdf4">'+fmt(affCnt)+'</td>'
+          +'<td style="color:#059669;font-weight:700;background:#f0fdf4">'+fmtF(x.drr||0)+'</td>'
+          +'<td style="color:#059669;font-weight:700;background:#f0fdf4">'+fmt(x.atp||0)+'</td>';
+      });
+      return cells+'</tr>';
+    }
+    return'<div class="dm-section">'
+      +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">'
+      +'<div class="dm-title" style="margin-bottom:0">'+title+' — Day-wise ATP / DRR / FSN Count</div>'
+      +'<div style="display:flex;align-items:center;gap:8px">'
+      +'<span style="font-size:10px;color:#64748b;font-weight:600">'+affCnt.toLocaleString('en-IN')+' FSN×Store combos</span>'
+      +'<button class="btn-export-sm" onclick="exportAffectedCSV(\''+tab+'\',\''+type+'\')" title="Download affected FSN×Store combos (L30 DRR>0.5 & DOH<10)">⬇ Affected CSV</button>'
+      +'</div></div>'
+      +'<div style="overflow-x:auto;margin-bottom:6px"><table class="dm-tbl"><thead>'+hdr+'</thead><tbody>'
+      +mkRow('🔴 Affected FSN','affected','dm-aff')
+      +mkRow('📋 Overall FSN','overall','dm-ov')
+      +mkComboRow()
+      +'</tbody></table></div>'
+      +'<div style="font-size:9.5px;color:#64748b;font-style:italic;margin-bottom:8px">'
+      +'ℹ️ Affected = FSN×Store combos where store-level L30 DRR &gt; 0.5 &amp; DOH &lt; 10. #FSN = unique FSN count.'
+      +'</div>'
+      +'<div class="dm-l30">'+buildL30Card(m,type)+'</div>'
+      +'</div>';
+  }
+  function buildL30Card(m,type){
+    var l30=m[(type==='ds'?'ds_l30':'sh_l30')]||{};
+    var ov=l30.overall||{},af=l30.affected||{};
+    function stat(k,v){return'<div class="dm-l30-stat"><span class="dm-l30-k">'+k+'</span><span class="dm-l30-v">'+v+'</span></div>';}
+    return'<div class="dm-l30-grid">'
+      +'<div class="dm-l30-card dm-l30-ov"><div class="dm-l30-ct">📋 Overall (L30)</div>'
+      +stat('#FSN',fmt(ov.fsn_count||0))+stat('DRR (HL/30d)',fmtF(ov.drr||0))+stat('Avg DOH',fmtF(ov.avg_doh||0)+'d')
+      +'</div>'
+      +'<div class="dm-l30-card dm-l30-af"><div class="dm-l30-ct">🔴 Affected (L30)</div>'
+      +stat('#FSN',fmt(af.fsn_count||0))+stat('DRR (HL/30d)',fmtF(af.drr||0))+stat('Avg DOH',fmtF(af.avg_doh||0)+'d')
+      +'</div></div>';
+  }
+  return'<div class="dm-wrap">'
+    +buildM(m.ds_matrix,DS_DAYS,'📦 DS Calculation','ds')
+    +buildM(m.sh_matrix,SH_DAYS,'🏭 SH Calculation','sh')
+    +'</div>';
+}
+function buildMs(tab,key,label,opts,selSet){var id='ms-'+key+'-'+tab;var cnt=selSet instanceof Set?selSet.size:0;var lbl=cnt===0?'All '+label:cnt+' selected';var allChk=(selSet instanceof Set&&selSet.size===opts.length)?"checked":"";var selAll='<label class="ms-item" style="border-bottom:1px solid #e2e8f0;font-weight:700" onclick="event.stopPropagation()"><input type="checkbox" '+allChk+' onchange="toggleSelectAll(event,\'+tab+\',\'+key+\',this.checked)"> <span>Select All</span></label>';var items=opts.map(v=>{var chk=selSet instanceof Set&&selSet.has(v)?'checked':'';var safe=v.replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/"/g,'&quot;');return'<label class="ms-item" onclick="event.stopPropagation()"><input type="checkbox" '+chk+' onchange="toggleFilter(\''+tab+'\',\''+key+'\',\''+safe+'\',this.checked)"> <span>'+v+'</span></label>';}).join('');return'<div class="ms-wrap" id="'+id+'" onclick="event.stopPropagation()">'+'<div class="ms-toggle" onclick="toggleMs(\''+id+'\',event)"><span class="ms-lbl">'+lbl+'</span><span class="ms-arrow">▾</span></div>'+'<div class="ms-dropdown" id="'+id+'-dd" style="display:none;flex-direction:column">'+'<div class="ms-search"><input type="text" placeholder="Search..." oninput="filterMsList(\''+id+'-dd\',this.value)" onclick="event.stopPropagation()"></div>'+'<div class="ms-list">'+selAll+items+'</div>'+'</div>'+'</div>';}
+function buildFilters(tab,data,filters){var verts=uniq(data,'vertical'),scats=uniq(data,'supercat'),brands=uniq(data,'brand'),atps=uniq(data,'atp_avail');var bbdOpts=uniq(data.filter(r=>r.bbd_master),'bbd_master');return'<div class="filter-bar">'+'<div class="filter-group"><label>Vertical</label>'+buildMs(tab,'vertical','Verticals',verts,filters.vertical)+'</div>'+'<div class="filter-group"><label>Super Category</label>'+buildMs(tab,'supercat','Categories',scats,filters.supercat)+'</div>'+'<div class="filter-group"><label>Brand</label>'+buildMs(tab,'brand','Brands',brands,filters.brand)+'</div>'+'<div class="filter-group"><label>ATP Type</label>'+buildMs(tab,'atp_avail','ATP Types',atps,filters.atp_avail)+'</div>'+'<div class="filter-group"><label>BBD Master</label>'+buildMs(tab,'bbd_master','BBD Master',bbdOpts,filters.bbd_master)+'</div>'+'<div class="filter-group"><label>Search FSN</label><input type="text" class="fsn-search" placeholder="FSN..." value="'+(filters.fsn||'')+'" oninput="setFsnFilter(\''+tab+'\',this.value)"></div>'+'<div style="display:flex;gap:6px;align-items:flex-end">'+'<button class="btn-reset" onclick="resetFilters(\''+tab+'\')">↺ Reset</button>'+'<button class="btn-export" onclick="exportCSV(\''+tab+'\')">⬇ CSV</button>'+'</div>'+'</div>';}
+const ALERT_COLS=[{h:'FSN',fn:r=>'<span class="fsn-cell">'+r.fsn+'</span>'},{h:'FSN | Store Combos',fn:r=>'<span class="combo-cell" title="'+fsnStoreCombos(r)+'">'+fsnStoreCombos(r)+'</span>'},{h:'Brand',fn:r=>'<b>'+r.brand+'</b>'},{h:'Vertical',fn:r=>r.vertical},{h:'ATP',fn:r=>atpBadge(r.atp_avail)},{h:'SH ATP',fn:r=>'<span class="atp-sh">'+fmt(r.sh_atp)+'</span>'},{h:'DS ATP',fn:r=>'<span class="atp-ds">'+fmt(r.ds_atp)+'</span>'},{h:'Total ATP',fn:r=>'<span class="atp-total">'+fmt(r.total_atp)+'</span>'},{h:'DRR',fn:r=>drrCell(r.drr)},{h:'DOH',fn:r=>dohCell(r.doh)},{h:'L30 FK',fn:r=>fmt(r.l30_fk)},{h:'L30 HL',fn:r=>fmt(r.l30_hl)},{h:'Product',fn:r=>'<span title="'+r.title+'">'+r.title.substring(0,35)+'…</span>'}];
+const GSLI_COLS=[{h:'FSN',fn:r=>'<span class="fsn-cell">'+r.fsn+'</span>'},{h:'FSN | Store Combos',fn:r=>'<span class="combo-cell" title="'+fsnStoreCombos(r)+'">'+fsnStoreCombos(r)+'</span>'},{h:'Brand',fn:r=>'<b>'+r.brand+'</b>'},{h:'Super Cat',fn:r=>r.supercat},{h:'ATP',fn:r=>atpBadge(r.atp_avail)},{h:'Total ATP',fn:r=>'<span class="atp-total">'+fmt(r.total_atp)+'</span>'},{h:'DRR',fn:r=>drrCell(r.drr)},{h:'DOH',fn:r=>dohCell(r.doh)},{h:'L30 FK',fn:r=>'<b style="color:#059669">'+fmt(r.l30_fk)+'</b>'},{h:'L30 HL',fn:r=>'<b style="color:#0891b2">'+fmt(r.l30_hl)+'</b>'},{h:'SH ATP',fn:r=>'<span class="atp-sh">'+fmt(r.sh_atp)+'</span>'},{h:'DS ATP',fn:r=>'<span class="atp-ds">'+fmt(r.ds_atp)+'</span>'},{h:'Product',fn:r=>'<span title="'+r.title+'">'+r.title.substring(0,30)+'…</span>'}];
+function miniSubtotal(rows,cols){return'<tr class="mini-subtotal"><td colspan="'+cols.length+'" style="padding:6px 9px;font-size:10px">'+'SUBTOTAL ('+rows.length+' FSNs) &nbsp;| '+'SH ATP: <b>'+fmt(rows.reduce((s,r)=>s+r.sh_atp,0))+'</b> &nbsp;| '+'DS ATP: <b>'+fmt(rows.reduce((s,r)=>s+r.ds_atp,0))+'</b> &nbsp;| '+'Total ATP: <b>'+fmt(rows.reduce((s,r)=>s+r.total_atp,0))+'</b> &nbsp;| '+'L30 FK: <b>'+fmt(rows.reduce((s,r)=>s+r.l30_fk,0))+'</b> &nbsp;| '+'L30 HL: <b>'+fmt(rows.reduce((s,r)=>s+r.l30_hl,0))+'</b>'+'</td></tr>';}
+function buildAlertTable(rows,cols){if(!rows.length)return'<div style="color:#64748b;padding:16px;text-align:center;font-style:italic;font-size:11px">No items at this threshold.</div>';return'<div style="overflow-x:auto"><table class="mini-tbl">'+'<thead><tr>'+cols.map(c=>'<th>'+c.h+'</th>').join('')+'</tr></thead>'+'<tbody>'+miniSubtotal(rows,cols)+rows.map(r=>'<tr>'+cols.map(c=>'<td>'+c.fn(r)+'</td>').join('')+'</tr>').join('')+'</tbody>'+'</table></div>';}
+function buildAlerts(tab,stats){
+  var noDsAll=stats.noDsHighDrr.sort((a,b)=>b.drr-a.drr);var noDsTop=noDsAll.slice(0,200);
+  var noShAll=stats.noShHighDrr.sort((a,b)=>b.drr-a.drr);var noShTop=noShAll.slice(0,200);
+  var lowDohAll=stats.lowDoh.sort((a,b)=>a.doh-b.doh);var lowDoh=lowDohAll.slice(0,200);
+  var critAll=stats.critStock.sort((a,b)=>a.doh-b.doh);var crit=critAll.slice(0,200);
+  var gsliAll=stats.goodSalesLowInv.sort((a,b)=>(b.l30_fk+b.l30_hl)-(a.l30_fk+a.l30_hl));var gsli=gsliAll.slice(0,200);
+  if(!window.ADAT)window.ADAT={};window.ADAT[tab+'_NoDS_ATP']=noDsTop;window.ADAT[tab+'_NoSH_ATP']=noShTop;window.ADAT[tab+'_Low_DOH']=lowDoh;window.ADAT[tab+'_Critical_Stock']=crit;window.ADAT[tab+'_Good_Sales_Low_Stock']=gsli;
+  function apanel(id,title,rows,total,cols,badgeCls,csvName){return'<div id="'+id+'" class="alert-panel">'+'<div class="section-head"><h3>'+title+'</h3>'+'<div class="section-head-right">'+'<span class="cnt-badge '+badgeCls+'">'+total+' FSNs</span>'+'<button class="btn-export-sm" onclick="exportAlertCSV(window.ADAT[\'' + tab + '_' + csvName + '\'],\'' + csvName + '\')">⬇ CSV</button>'+'</div></div>'+buildAlertTable(rows,cols)+'</div>';}
+  return'<div class="alerts">'+'<div class="alert-header"><h2>🚨 Pro Insights — Action Required</h2></div>'+'<div class="alert-tabs">'+'<div class="alert-tab active" onclick="switchAlert(this,\'aNoDs-'+tab+'\')">❌ No DS ATP · High DRR <span class="atab-cnt red">'+noDsAll.length+'</span></div>'+'<div class="alert-tab" onclick="switchAlert(this,\'aNoSh-'+tab+'\')">❌ No SH ATP · High DRR <span class="atab-cnt red">'+noShAll.length+'</span></div>'+'<div class="alert-tab" onclick="switchAlert(this,\'aLDoh-'+tab+'\')">⚠️ DOH &lt;7d <span class="atab-cnt amber">'+lowDohAll.length+'</span></div>'+'<div class="alert-tab" onclick="switchAlert(this,\'aCrit-'+tab+'\')">🔴 Critical &lt;3d <span class="atab-cnt red">'+critAll.length+'</span></div>'+'<div class="alert-tab" onclick="switchAlert(this,\'aGsli-'+tab+'\')">📈 Good Sales, Low Stock <span class="atab-cnt teal">'+gsliAll.length+'</span></div>'+'</div>'+'<div class=\'alert-tab\' onclick=\'clearAlerts(this)\'>✕ None</div>'+apanel('aNoDs-'+tab,'DRR ≥30 + <span style="color:#dc2626">Zero DS ATP</span>',noDsTop,noDsAll.length,ALERT_COLS,'','NoDS_ATP')+apanel('aNoSh-'+tab,'DRR ≥30 + <span style="color:#7c3aed">Zero SH ATP</span>',noShTop,noShAll.length,ALERT_COLS,'','NoSH_ATP')+apanel('aLDoh-'+tab,'All FSNs with <span style="color:#d97706">DOH &lt;7 days</span>',lowDoh,lowDohAll.length,ALERT_COLS,'amber','Low_DOH')+apanel('aCrit-'+tab,'All FSNs with <span style="color:#dc2626">DOH &lt;3 days</span> — Critical',crit,critAll.length,ALERT_COLS,'','Critical_Stock')+apanel('aGsli-'+tab,'<span style="color:#059669">L30 Sales &gt;500</span> + <span style="color:#d97706">DOH &lt;14d</span>',gsli,gsliAll.length,GSLI_COLS,'teal','Good_Sales_Low_Stock')+'<script>document.getElementById("aNoDs-'+tab+'").classList.add("active");<\/script>'+'</div>';}
+const MAIN_COLS=[
+  {h:'FSN',k:'fsn',fn:r=>'<span class="fsn-cell">'+r.fsn+'</span>',sub:()=>'SUBTOTAL'},
+  {h:'FSN | Store ID Combos',k:null,fn:r=>'<span class="combo-cell" title="'+fsnStoreCombos(r)+'">'+fsnStoreCombos(r,3)+'</span>',sub:()=>''},
+  {h:'Store IDs',k:null,fn:r=>r.store_count>0?'<span title="'+r.store_ids.join(', ')+'">'+r.store_ids[0]+(r.store_count>1?' +'+(r.store_count-1):'')+'</span>':'-',sub:()=>''},
+  {h:'Vertical',k:'vertical',fn:r=>r.vertical,sub:()=>''},
+  {h:'Super Category',k:'supercat',fn:r=>'<span title="'+r.supercat+'">'+r.supercat.substring(0,16)+'</span>',sub:()=>''},
+  {h:'Brand',k:'brand',fn:r=>'<b>'+r.brand+'</b>',sub:()=>''},
+  {h:'ATP',k:'atp_avail',fn:r=>atpBadge(r.atp_avail),sub:()=>''},
+  {h:'BBD Master',k:'bbd_master',fn:r=>r.bbd_master==='Master'?'<span class="badge b-both">Master</span>':r.bbd_master==='OOM'?'<span class="badge b-none">OOM</span>':'<span style="color:#94a3b8">—</span>',sub:()=>''},
+  {h:'SH ATP',k:'sh_atp',fn:r=>'<span class="atp-sh">'+fmt(r.sh_atp)+'</span>',sub:rows=>fmt(rows.reduce((s,r)=>s+r.sh_atp,0))},
+  {h:'DS ATP',k:'ds_atp',fn:r=>'<span class="atp-ds">'+fmt(r.ds_atp)+'</span>',sub:rows=>fmt(rows.reduce((s,r)=>s+r.ds_atp,0))},
+  {h:'Total ATP',k:'total_atp',fn:r=>'<span class="atp-total">'+fmt(r.total_atp)+'</span>',sub:rows=>fmt(rows.reduce((s,r)=>s+r.total_atp,0))},
+  {h:'L7 FK',k:'l7_fk',fn:r=>fmt(r.l7_fk),sub:rows=>fmt(rows.reduce((s,r)=>s+r.l7_fk,0))},
+  {h:'L7 HL',k:'l7_hl',fn:r=>fmt(r.l7_hl),sub:rows=>fmt(rows.reduce((s,r)=>s+r.l7_hl,0))},
+  {h:'L30 FK',k:'l30_fk',fn:r=>fmt(r.l30_fk),sub:rows=>fmt(rows.reduce((s,r)=>s+r.l30_fk,0))},
+  {h:'L30 HL',k:'l30_hl',fn:r=>fmt(r.l30_hl),sub:rows=>fmt(rows.reduce((s,r)=>s+r.l30_hl,0))},
+  {h:'DRR',k:'drr',fn:r=>drrCell(r.drr),sub:()=>''},
+  {h:'DOH',k:'doh',fn:r=>dohCell(r.doh),sub:()=>''},
+];
+function buildTable(tab,data,s){
+  var filtered=applyFilters(data,s.filters),sorted=sortData(filtered,s.sort,s.dir);
+  var total=sorted.length,totalPages=Math.max(1,Math.ceil(total/PAGE_SIZE));
+  var pg=Math.min(s.page,totalPages),slice=sorted.slice((pg-1)*PAGE_SIZE,pg*PAGE_SIZE);
+  var thead='<thead><tr>'+MAIN_COLS.map(c=>{var a=s.sort===c.k,cls=a?(s.dir===-1?'sort-desc':'sort-asc'):'';return'<th class="'+cls+'"'+(c.k?' onclick="doSort(\''+tab+'\',\''+c.k+'\')">':'>') +c.h+'</th>';}).join('')+'</tr></thead>';
+  var subtotalRow='<tr class="subtotal-row">'+MAIN_COLS.map(c=>'<td>'+c.sub(sorted)+'</td>').join('')+'</tr>';
+  var tbody='<tbody>'+subtotalRow+slice.map(r=>'<tr>'+MAIN_COLS.map(c=>'<td>'+c.fn(r)+'</td>').join('')+'</tr>').join('')+'</tbody>';
+  var pages=[];
+  if(totalPages<=7){for(var i=1;i<=totalPages;i++)pages.push(i);}
+  else{pages=[1];var lo=Math.max(2,pg-2),hi=Math.min(totalPages-1,pg+2);if(lo>2)pages.push('…');for(var i=lo;i<=hi;i++)pages.push(i);if(hi<totalPages-1)pages.push('…');pages.push(totalPages);}
+  var pag='<div class="pagination">'+'<div class="pg-info">Showing '+((pg-1)*PAGE_SIZE+1).toLocaleString('en-IN')+'–'+Math.min(pg*PAGE_SIZE,total).toLocaleString('en-IN')+' of <b>'+total.toLocaleString('en-IN')+'</b> FSNs</div>'+'<div class="pg-btns">'+'<div class="pg-btn" onclick="goPage(\''+tab+'\','+(pg-1)+')">&#8249;</div>'+pages.map(p=>p==='…'?'<div class="pg-btn" style="cursor:default">…</div>':'<div class="pg-btn '+(p===pg?'active':'')+'"\'onclick="goPage(\''+tab+'\','+p+')">'+p+'</div>').join('')+'<div class="pg-btn" onclick="goPage(\''+tab+'\','+(pg+1)+')">&#8250;</div>'+'</div></div>';
+  return'<div class="tbl-wrap"><table>'+thead+tbody+'</table></div>'+pag;}
+function renderPanel(tab){
+  var data=DATA[tab],el=document.getElementById('tab-'+tab);
+  if(!data||!data.length){el.innerHTML='<div style="text-align:center;padding:50px;color:#64748b"><div style="font-size:40px;margin-bottom:12px">📂</div><div style="font-size:14px;color:#1e40af;font-weight:700">No data for this vertical.</div></div>';return;}
+  var s=state[tab],stats=computeStats(data);
+  var note=tab==='large'&&data.length>=5000?'<div class="info-bar">ℹ️ Large Appliances: showing top 5,000 FSNs by DRR.</div>':'';
+  var cards='<div class="cards">'+'<div class="card"><div class="val">'+stats.t.toLocaleString('en-IN')+'</div><div class="lbl">Total FSNs</div></div>'+'<div class="card green"><div class="val">'+stats.both.toLocaleString('en-IN')+'</div><div class="lbl">DS + SH</div></div>'+'<div class="card teal"><div class="val">'+stats.dsOnly.toLocaleString('en-IN')+'</div><div class="lbl">DS Only</div></div>'+'<div class="card purple"><div class="val">'+stats.shOnly.toLocaleString('en-IN')+'</div><div class="lbl">SH Only</div></div>'+'<div class="card orange"><div class="val">'+stats.noAtp.toLocaleString('en-IN')+'</div><div class="lbl">No ATP</div></div>'+'<div class="card blue2"><div class="val">'+fmtK(stats.ds_atp_sum)+'</div><div class="lbl">Total DS ATP</div></div>'+'<div class="card indigo"><div class="val">'+fmtK(stats.sh_atp_sum)+'</div><div class="lbl">Total SH ATP</div></div>'+'<div class="card red"><div class="val">'+stats.noDsHighDrr.length+'</div><div class="lbl">High DRR · No DS</div></div>'+'<div class="card red"><div class="val">'+stats.noShHighDrr.length+'</div><div class="lbl">High DRR · No SH</div></div>'+'<div class="card orange"><div class="val">'+stats.lowDoh.length+'</div><div class="lbl">DOH &lt;7 Days</div></div>'+'<div class="card teal"><div class="val">'+stats.goodSalesLowInv.length+'</div><div class="lbl">Good Sales · Low Stock</div></div>'+'</div>';
+  var matrix=renderDayMatrix(tab);el.innerHTML=matrix+note+cards+buildAlerts(tab,stats)+buildFilters(tab,data,s.filters)+buildTable(tab,data,s);}
+function renderOverview(){
+  var tabs=['mobile','large','lifestyle','electronics'];
+  var allStats={};tabs.forEach(t=>allStats[t]=computeStats(DATA[t]||[]));
+  var buGrid='<div class="ov-grid">'+tabs.map(t=>{
+    var s=allStats[t],m=TAB_META[t];
+    return'<div class="ov-bu '+m.cls+'">'+'<div class="ov-bu-title">'+m.label+'</div>'+'<div class="ov-stat"><span class="k">Total FSNs</span><span class="v">'+s.t.toLocaleString('en-IN')+'</span></div>'+'<div class="ov-stat"><span class="k">DS + SH</span><span class="v green">'+s.both.toLocaleString('en-IN')+'</span></div>'+'<div class="ov-stat"><span class="k">DS Only</span><span class="v teal">'+s.dsOnly.toLocaleString('en-IN')+'</span></div>'+'<div class="ov-stat"><span class="k">SH Only</span><span class="v purple">'+s.shOnly.toLocaleString('en-IN')+'</span></div>'+'<div class="ov-stat"><span class="k">No ATP</span><span class="v orange">'+s.noAtp.toLocaleString('en-IN')+'</span></div>'+'<div class="ov-stat"><span class="k">Total DS ATP</span><span class="v blue">'+fmtK(s.ds_atp_sum)+'</span></div>'+'<div class="ov-stat"><span class="k">Total SH ATP</span><span class="v purple">'+fmtK(s.sh_atp_sum)+'</span></div>'+'<div class="ov-stat"><span class="k">No DS · High DRR</span><span class="v red">'+s.noDsHighDrr.length+'</span></div>'+'<div class="ov-stat"><span class="k">DOH &lt;7 Days</span><span class="v orange">'+s.lowDoh.length+'</span></div>'+'<div class="ov-stat"><span class="k">Good Sales, Low Stock</span><span class="v teal">'+s.goodSalesLowInv.length+'</span></div>'+'</div>';}).join('')+'</div>';
+  var chartHtml='<div class="chart-section">'+'<div class="chart-section-title">📊 ATP Coverage by Vertical — All BUs</div>'+'<div class="chart-2col">'+'<div><div style="font-size:10.5px;font-weight:700;color:#64748b;margin-bottom:6px">Stacked Coverage (FSN Count)</div><div class="chart-inner"><canvas id="chart-ov-stacked"></canvas></div></div>'+'<div><div style="font-size:10.5px;font-weight:700;color:#64748b;margin-bottom:6px">Critical Alerts Comparison</div><div class="chart-inner"><canvas id="chart-ov-alerts"></canvas></div></div>'+'</div></div>';
+  document.getElementById('tab-overview').innerHTML=buGrid+chartHtml;
+  setTimeout(function(){initOverviewCharts(tabs,allStats);},80);}
+function initOverviewCharts(tabs,allStats){
+  ['chart-ov-stacked','chart-ov-alerts'].forEach(id=>{if(charts[id]){charts[id].destroy();delete charts[id];}});
+  var labels=tabs.map(t=>TAB_META[t].label.replace(/^.+ /,''));
+  var sel=document.getElementById('chart-ov-stacked');
+  if(sel&&typeof Chart!=='undefined'){
+    charts['chart-ov-stacked']=new Chart(sel,{type:'bar',data:{labels,datasets:[{label:'DS+SH',data:tabs.map(t=>allStats[t].both),backgroundColor:'#10b981',borderRadius:2},{label:'DS Only',data:tabs.map(t=>allStats[t].dsOnly),backgroundColor:'#3b82f6',borderRadius:2},{label:'SH Only',data:tabs.map(t=>allStats[t].shOnly),backgroundColor:'#8b5cf6',borderRadius:2},{label:'No ATP',data:tabs.map(t=>allStats[t].noAtp),backgroundColor:'#ef4444',borderRadius:2},]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:10},boxWidth:10,padding:8}}},scales:{x:{stacked:true,grid:{display:false},ticks:{font:{size:10}}},y:{stacked:true,grid:{color:'#f1f5f9'},ticks:{font:{size:10}}}}}});}
+  var ael=document.getElementById('chart-ov-alerts');
+  if(ael&&typeof Chart!=='undefined'){
+    charts['chart-ov-alerts']=new Chart(ael,{type:'bar',data:{labels,datasets:[{label:'No DS ATP',data:tabs.map(t=>allStats[t].noDsHighDrr.length),backgroundColor:'#dc2626',borderRadius:2},{label:'No SH ATP',data:tabs.map(t=>allStats[t].noShHighDrr.length),backgroundColor:'#8b5cf6',borderRadius:2},{label:'DOH <7d',data:tabs.map(t=>allStats[t].lowDoh.length),backgroundColor:'#f59e0b',borderRadius:2},{label:'Critical <3d',data:tabs.map(t=>allStats[t].critStock.length),backgroundColor:'#ef4444',borderRadius:2},]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:10},boxWidth:10,padding:8}}},scales:{x:{grid:{display:false},ticks:{font:{size:10}}},y:{grid:{color:'#f1f5f9'},ticks:{font:{size:10}}}}}});}}
+function switchTab(tab,el){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));el.classList.add('active');document.getElementById('tab-'+tab).classList.add('active');if(tab==='overview')renderOverview();else renderPanel(tab);}
+function clearAlerts(el){var p=el.closest('.alerts');p.querySelectorAll('.alert-tab').forEach(t=>t.classList.remove('active'));p.querySelectorAll('.alert-panel').forEach(p=>p.classList.remove('active'));el.classList.add('active');}
+function switchAlert(el,id){var p=el.closest('.alerts');p.querySelectorAll('.alert-tab').forEach(t=>t.classList.remove('active'));p.querySelectorAll('.alert-panel').forEach(p=>p.classList.remove('active'));el.classList.add('active');document.getElementById(id).classList.add('active');}
+function goPage(tab,pg){var data=DATA[tab],filtered=applyFilters(data,state[tab].filters);var total=Math.max(1,Math.ceil(filtered.length/PAGE_SIZE));state[tab].page=Math.max(1,Math.min(pg,total));renderPanel(tab);}
+function doSort(tab,col){if(state[tab].sort===col)state[tab].dir*=-1;else{state[tab].sort=col;state[tab].dir=-1;}state[tab].page=1;renderPanel(tab);}
+renderPanel('mobile');
+</script></body></html>
